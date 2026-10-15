@@ -1,0 +1,40 @@
+# Blueprint do Render (https://render.com/docs/blueprint-spec). Ainda nao publiquei: precisa da minha conta.
+services:
+  - type: web
+    name: estoque-pdv-api
+    runtime: docker
+    plan: free
+    healthCheckPath: /actuator/health
+    envVars:
+      - key: DB_HOST
+        fromDatabase:
+          name: estoque-pdv-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: estoque-pdv-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: estoque-pdv-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: estoque-pdv-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: estoque-pdv-db
+          property: password
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: SELLER_PASSWORD
+        sync: false
+      - key: CORS_ORIGINS
+        value: http://localhost:5173
+
+databases:
+  - name: estoque-pdv-db
+    plan: free

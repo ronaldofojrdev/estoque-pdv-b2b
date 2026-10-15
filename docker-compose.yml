@@ -1,0 +1,25 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: pdv
+      POSTGRES_PASSWORD: pdv
+      POSTGRES_DB: pdv
+    ports:
+      - "5436:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pdv"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build: .
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/pdv
+      JWT_SECRET: segredo-local-com-mais-de-32-caracteres-123
+    ports:
+      - "8084:8084"
+    depends_on:
+      postgres:
+        condition: service_healthy
